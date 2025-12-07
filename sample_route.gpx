@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="PyAscent Sample" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <name>Sample Mountain Ride</name>
+    <desc>A sample cycling route with climbs for testing PyAscent</desc>
+  </metadata>
+  <trk>
+    <name>Mountain Cycling Route</name>
+    <trkseg>
+      <trkpt lat="40.7580" lon="-73.9855"><ele>10</ele></trkpt>
+      <trkpt lat="40.7585" lon="-73.9860"><ele>15</ele></trkpt>
+      <trkpt lat="40.7590" lon="-73.9865"><ele>20</ele></trkpt>
+      <trkpt lat="40.7595" lon="-73.9870"><ele>25</ele></trkpt>
+      <trkpt lat="40.7600" lon="-73.9875"><ele>30</ele></trkpt>
+      <trkpt lat="40.7605" lon="-73.9880"><ele>40</ele></trkpt>
+      <trkpt lat="40.7610" lon="-73.9885"><ele>55</ele></trkpt>
+      <trkpt lat="40.7615" lon="-73.9890"><ele>75</ele></trkpt>
+      <trkpt lat="40.7620" lon="-73.9895"><ele>100</ele></trkpt>
+      <trkpt lat="40.7625" lon="-73.9900"><ele>130</ele></trkpt>
+      <trkpt lat="40.7630" lon="-73.9905"><ele>165</ele></trkpt>
+      <trkpt lat="40.7635" lon="-73.9910"><ele>200</ele></trkpt>
+      <trkpt lat="40.7640" lon="-73.9915"><ele>230</ele></trkpt>
+      <trkpt lat="40.7645" lon="-73.9920"><ele>250</ele></trkpt>
+      <trkpt lat="40.7650" lon="-73.9925"><ele>260</ele></trkpt>
+      <trkpt lat="40.7655" lon="-73.9930"><ele>255</ele></trkpt>
+      <trkpt lat="40.7660" lon="-73.9935"><ele>245</ele></trkpt>
+      <trkpt lat="40.7665" lon="-73.9940"><ele>230</ele></trkpt>
+      <trkpt lat="40.7670" lon="-73.9945"><ele>210</ele></trkpt>
+      <trkpt lat="40.7675" lon="-73.9950"><ele>185</ele></trkpt>
+      <trkpt lat="40.7680" lon="-73.9955"><ele>160</ele></trkpt>
+      <trkpt lat="40.7685" lon="-73.9960"><ele>140</ele></trkpt>
+      <trkpt lat="40.7690" lon="-73.9965"><ele>125</ele></trkpt>
+      <trkpt lat="40.7695" lon="-73.9970"><ele>115</ele></trkpt>
+      <trkpt lat="40.7700" lon="-73.9975"><ele>110</ele></trkpt>
+      <trkpt lat="40.7705" lon="-73.9980"><ele>120</ele></trkpt>
+      <trkpt lat="40.7710" lon="-73.9985"><ele>140</ele></trkpt>
+      <trkpt lat="40.7715" lon="-73.9990"><ele>170</ele></trkpt>
+      <trkpt lat="40.7720" lon="-73.9995"><ele>210</ele></trkpt>
+      <trkpt lat="40.7725" lon="-74.0000"><ele>260</ele></trkpt>
+      <trkpt lat="40.7730" lon="-74.0005"><ele>320</ele></trkpt>
+      <trkpt lat="40.7735" lon="-74.0010"><ele>390</ele></trkpt>
+      <trkpt lat="40.7740" lon="-74.0015"><ele>460</ele></trkpt>
+      <trkpt lat="40.7745" lon="-74.0020"><ele>520</ele></trkpt>
+      <trkpt lat="40.7750" lon="-74.0025"><ele>570</ele></trkpt>
+      <trkpt lat="40.7755" lon="-74.0030"><ele>600</ele></trkpt>
+      <trkpt lat="40.7760" lon="-74.0035"><ele>590</ele></trkpt>
+      <trkpt lat="40.7765" lon="-74.0040"><ele>575</ele></trkpt>
+      <trkpt lat="40.7770" lon="-74.0045"><ele>555</ele></trkpt>
+      <trkpt lat="40.7775" lon="-74.0050"><ele>530</ele></trkpt>
+      <trkpt lat="40.7780" lon="-74.0055"><ele>500</ele></trkpt>
+      <trkpt lat="40.7785" lon="-74.0060"><ele>465</ele></trkpt>
+      <trkpt lat="40.7790" lon="-74.0065"><ele>425</ele></trkpt>
+      <trkpt lat="40.7795" lon="-74.0070"><ele>380</ele></trkpt>
+      <trkpt lat="40.7800" lon="-74.0075"><ele>335</ele></trkpt>
+    </trkseg>
+  </trk>
+</gpx>
