@@ -115,7 +115,7 @@ class ClimbDetector:
             avg_gradient: Average gradient in percentage
         
         Returns:
-            Category string (HC, 1, 2, 3, 4, or None)
+            Category string (HC, 1, 2, 3, 4, or Uncategorized)
         """
         # Simplified categorization inspired by Tour de France categories
         difficulty_score = elevation_gain * avg_gradient

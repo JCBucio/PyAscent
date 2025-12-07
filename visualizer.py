@@ -69,9 +69,6 @@ class RouteVisualizer:
             )
             
             # Add climb marker at the peak
-            mid_distance = (distances[start_idx] + distances[end_idx]) / 2
-            max_elevation_in_climb = np.max(elevations[start_idx:end_idx+1])
-            
             ax.scatter(
                 distances[end_idx], 
                 elevations[end_idx], 
