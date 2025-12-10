@@ -98,9 +98,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Author
 
-JCBucio
+Juan Carlos Bucio Tejeda
 
 ## Acknowledgments
 
 - Climb categorization inspired by Tour de France classifications
-- Built with Streamlit, gpxpy, and matplotlib
+- Built with Streamlit, gpxpy, matplotlib and seaborn
