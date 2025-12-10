@@ -10,7 +10,7 @@ from typing import List, Dict, Tuple
 class ClimbDetector:
     """Detect and categorize climbs in cycling routes."""
     
-    def __init__(self, distances, elevations, min_gradient=3.0, min_elevation_gain=20.0):
+    def __init__(self, distances, elevations, min_gradient=3.0, min_elevation_gain=20.0, min_distance=0.3):
         """
         Initialize the climb detector.
         
@@ -19,11 +19,13 @@ class ClimbDetector:
             elevations: Array of elevations in meters
             min_gradient: Minimum average gradient to consider as climb (%)
             min_elevation_gain: Minimum elevation gain to consider (meters)
+            min_distance: Minimum distance to consider as a climb (km)
         """
         self.distances = distances
         self.elevations = elevations
         self.min_gradient = min_gradient
         self.min_elevation_gain = min_elevation_gain
+        self.min_distance = min_distance
     
     def detect_climbs(self) -> List[Dict]:
         """
@@ -69,18 +71,19 @@ class ClimbDetector:
                         climb_distance = self.distances[i-1] - self.distances[climb_start_idx]
                         avg_gradient = (elevation_gain / (climb_distance * 1000)) * 100 if climb_distance > 0 else 0
                         
-                        climbs.append({
-                            'start_idx': climb_start_idx,
-                            'end_idx': i-1,
-                            'start_distance': self.distances[climb_start_idx],
-                            'end_distance': self.distances[i-1],
-                            'start_elevation': self.elevations[climb_start_idx],
-                            'end_elevation': self.elevations[i-1],
-                            'elevation_gain': elevation_gain,
-                            'distance': climb_distance,
-                            'avg_gradient': avg_gradient,
-                            'category': self._categorize_climb(elevation_gain, avg_gradient)
-                        })
+                        if climb_distance >= self.min_distance:
+                            climbs.append({
+                                'start_idx': climb_start_idx,
+                                'end_idx': i-1,
+                                'start_distance': self.distances[climb_start_idx],
+                                'end_distance': self.distances[i-1],
+                                'start_elevation': self.elevations[climb_start_idx],
+                                'end_elevation': self.elevations[i-1],
+                                'elevation_gain': elevation_gain,
+                                'distance': climb_distance,
+                                'avg_gradient': avg_gradient,
+                                'category': self._categorize_climb(elevation_gain, avg_gradient)
+                            })
                     
                     in_climb = False
         
@@ -91,18 +94,19 @@ class ClimbDetector:
                 climb_distance = self.distances[-1] - self.distances[climb_start_idx]
                 avg_gradient = (elevation_gain / (climb_distance * 1000)) * 100 if climb_distance > 0 else 0
                 
-                climbs.append({
-                    'start_idx': climb_start_idx,
-                    'end_idx': len(self.distances) - 1,
-                    'start_distance': self.distances[climb_start_idx],
-                    'end_distance': self.distances[-1],
-                    'start_elevation': self.elevations[climb_start_idx],
-                    'end_elevation': self.elevations[-1],
-                    'elevation_gain': elevation_gain,
-                    'distance': climb_distance,
-                    'avg_gradient': avg_gradient,
-                    'category': self._categorize_climb(elevation_gain, avg_gradient)
-                })
+                if climb_distance >= self.min_distance:
+                    climbs.append({
+                        'start_idx': climb_start_idx,
+                        'end_idx': len(self.distances) - 1,
+                        'start_distance': self.distances[climb_start_idx],
+                        'end_distance': self.distances[-1],
+                        'start_elevation': self.elevations[climb_start_idx],
+                        'end_elevation': self.elevations[-1],
+                        'elevation_gain': elevation_gain,
+                        'distance': climb_distance,
+                        'avg_gradient': avg_gradient,
+                        'category': self._categorize_climb(elevation_gain, avg_gradient)
+                    })
         
         return climbs
     

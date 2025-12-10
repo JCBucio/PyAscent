@@ -53,6 +53,14 @@ class RouteVisualizer:
             '4': '#457B9D',   # Blue
             'Uncategorized': '#A8A8A8'  # Gray
         }
+
+        category_labels = {
+            'HC': 'HC (>1200m gain or difficulty score >8000)',
+            '1': 'Category 1 (>800m gain or difficulty score >5000)',
+            '2': 'Category 2 (>500m gain or difficulty score >3000)',
+            '3': 'Category 3 (>300m gain or difficulty score >1500)',
+            '4': 'Category 4 (meets minimum elevation gain)',
+        }
         
         # Mark climbs on the profile
         for climb in self.climbs:
@@ -92,6 +100,16 @@ class RouteVisualizer:
                     bbox=dict(boxstyle='round,pad=0.5', facecolor=color, alpha=0.8, edgecolor='white'),
                     color='white'
                 )
+            
+        # Adjust y-axis limits
+        min_elevation = elevations.min()
+        max_elevation = elevations.max()
+        elevation_range = max_elevation - min_elevation
+
+        # Add 10% padding to the bottom and 15% to the top
+        y_min = min_elevation - (elevation_range * 0.1)
+        y_max = max_elevation + (elevation_range * 0.15)
+        ax.set_ylim(y_min, y_max)
         
         # Set labels and title
         ax.set_xlabel('Distance (km)', fontsize=12, fontweight='bold')
@@ -106,7 +124,7 @@ class RouteVisualizer:
             for category in ['HC', '1', '2', '3', '4']:
                 if category in categories_present:
                     legend_elements.append(
-                        mpatches.Patch(color=category_colors[category], label=f'Category {category}')
+                        mpatches.Patch(color=category_colors[category], label=category_labels.get(category, f'Category {category}'))
                     )
             if legend_elements:
                 ax.legend(handles=legend_elements, loc='upper right', fontsize=10)

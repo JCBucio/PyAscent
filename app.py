@@ -32,7 +32,7 @@ def main():
     min_gradient = st.sidebar.slider(
         "Minimum Gradient (%)", 
         min_value=1.0, 
-        max_value=10.0, 
+        max_value=15.0, 
         value=3.0, 
         step=0.5,
         help="Minimum average gradient to consider as a climb"
@@ -40,10 +40,18 @@ def main():
     min_elevation_gain = st.sidebar.slider(
         "Minimum Elevation Gain (m)", 
         min_value=10, 
-        max_value=100, 
+        max_value=150, 
         value=20, 
         step=5,
         help="Minimum elevation gain to consider as a climb"
+    )
+    min_distance = st.sidebar.slider(
+        "Minimum Climb Distance (km)", 
+        min_value=0.1, 
+        max_value=10.0, 
+        value=0.3, 
+        step=0.1,
+        help="Minimum distance of a climb to be considered"
     )
     
     # File uploader
@@ -79,7 +87,8 @@ def main():
                     route_data['distances'],
                     route_data['elevations'],
                     min_gradient=min_gradient,
-                    min_elevation_gain=min_elevation_gain
+                    min_elevation_gain=min_elevation_gain,
+                    min_distance=min_distance
                 )
                 climbs = detector.detect_climbs()
             
