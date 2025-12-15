@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
 from io import BytesIO
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 
 class RouteVisualizer:
@@ -24,13 +24,15 @@ class RouteVisualizer:
         self.route_data = route_data
         self.climbs = climbs
     
-    def create_elevation_profile(self, figsize=(14, 6), dpi=100):
+    def create_elevation_profile(self, figsize=(14, 6), dpi=100, title: Optional[str] = None, climb_names: Optional[Dict[int, str]] = None):
         """
         Create an elevation profile with marked climbs.
         
         Args:
             figsize: Figure size tuple (width, height)
             dpi: Dots per inch for image resolution
+            title: Custom title for the graph (optional)
+            climb_names: Dictionary mapping climb index to custom name (optional)
         
         Returns:
             BytesIO object containing the image
@@ -44,62 +46,51 @@ class RouteVisualizer:
         ax.plot(distances, elevations, linewidth=2, color='#2E86AB', label='Elevation')
         ax.fill_between(distances, elevations, alpha=0.3, color='#A8DADC')
         
-        # Color mapping for climb categories
-        category_colors = {
-            'HC': '#E63946',  # Red - Hardest
-            '1': '#F77F00',   # Orange
-            '2': '#FCBF49',   # Yellow
-            '3': '#06A77D',   # Green
-            '4': '#457B9D',   # Blue
-            'Uncategorized': '#A8A8A8'  # Gray
-        }
-
-        category_labels = {
-            'HC': 'HC (>1200m gain or difficulty score >8000)',
-            '1': 'Category 1 (>800m gain or difficulty score >5000)',
-            '2': 'Category 2 (>500m gain or difficulty score >3000)',
-            '3': 'Category 3 (>300m gain or difficulty score >1500)',
-            '4': 'Category 4 (meets minimum elevation gain)',
-        }
+        # Unified climb color
+        climb_color = '#f5cf23'
         
         # Mark climbs on the profile
-        for climb in self.climbs:
+        for climb_idx, climb in enumerate(self.climbs):
             start_idx = climb['start_idx']
             end_idx = climb['end_idx']
-            color = category_colors.get(climb['category'], '#A8A8A8')
             
-            # Highlight climb section
+            # Highlight climb section with unified color
             ax.fill_between(
                 distances[start_idx:end_idx+1],
                 elevations[start_idx:end_idx+1],
                 alpha=0.6,
-                color=color
+                color=climb_color
             )
             
             # Add climb marker at the peak
             ax.scatter(
                 distances[end_idx], 
                 elevations[end_idx], 
-                color=color, 
+                color=climb_color, 
                 s=150, 
                 zorder=5,
                 edgecolors='white',
                 linewidths=2
             )
             
-            # Add climb category label
-            if climb['category'] != 'Uncategorized':
-                ax.annotate(
-                    f"Cat {climb['category']}",
-                    xy=(distances[end_idx], elevations[end_idx]),
-                    xytext=(0, 20),
-                    textcoords='offset points',
-                    ha='center',
-                    fontsize=10,
-                    fontweight='bold',
-                    bbox=dict(boxstyle='round,pad=0.5', facecolor=color, alpha=0.8, edgecolor='white'),
-                    color='white'
-                )
+            # Format climb label
+            if climb_names and climb_idx in climb_names and climb_names[climb_idx]:
+                climb_label = climb_names[climb_idx]
+            else:
+                climb_label = f"{climb['elevation_gain']:.0f} m Climb {climb_idx + 1} ({climb['distance']:.1f} km at {climb['avg_gradient']:.1f}%)"
+            
+            # Add climb label
+            ax.annotate(
+                climb_label,
+                xy=(distances[end_idx], elevations[end_idx]),
+                xytext=(0, 20),
+                textcoords='offset points',
+                ha='center',
+                fontsize=10,
+                fontweight='bold',
+                bbox=dict(boxstyle='round,pad=0.5', facecolor=climb_color, alpha=0.8, edgecolor='white'),
+                color='black'
+            )
             
         # Adjust y-axis limits
         min_elevation = elevations.min()
@@ -114,20 +105,9 @@ class RouteVisualizer:
         # Set labels and title
         ax.set_xlabel('Distance (km)', fontsize=12, fontweight='bold')
         ax.set_ylabel('Elevation (m)', fontsize=12, fontweight='bold')
-        ax.set_title('Cycling Route Elevation Profile with Climbs', fontsize=14, fontweight='bold', pad=20)
+        graph_title = title if title else 'Cycling Route Elevation Profile with Climbs'
+        ax.set_title(graph_title, fontsize=14, fontweight='bold', pad=20)
         ax.grid(True, alpha=0.3, linestyle='--')
-        
-        # Add legend for climb categories
-        if self.climbs:
-            legend_elements = []
-            categories_present = set(climb['category'] for climb in self.climbs)
-            for category in ['HC', '1', '2', '3', '4']:
-                if category in categories_present:
-                    legend_elements.append(
-                        mpatches.Patch(color=category_colors[category], label=category_labels.get(category, f'Category {category}'))
-                    )
-            if legend_elements:
-                ax.legend(handles=legend_elements, loc='upper right', fontsize=10)
         
         plt.tight_layout()
         
@@ -139,17 +119,27 @@ class RouteVisualizer:
         
         return buf
     
-    def create_climb_summary_table(self):
+    def create_climb_summary_table(self, climb_names: Optional[Dict[int, str]] = None):
         """
         Create a summary of all climbs.
+        
+        Args:
+            climb_names: Dictionary mapping climb index to custom name (optional)
         
         Returns:
             List of dictionaries with formatted climb information
         """
         summary = []
-        for i, climb in enumerate(self.climbs, 1):
+        for i, climb in enumerate(self.climbs):
+            climb_name = 'Unknown'
+            if climb_names and i in climb_names and climb_names[i]:
+                climb_name = climb_names[i]
+            else:
+                climb_name = f"{climb['elevation_gain']:.0f} m Climb {i + 1}"
+            
             summary.append({
-                'Climb #': i,
+                'Climb #': i + 1,
+                'Climb Name': climb_name,
                 'Start (km)': f"{climb['start_distance']:.2f}",
                 'End (km)': f"{climb['end_distance']:.2f}",
                 'Distance (km)': f"{climb['distance']:.2f}",

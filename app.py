@@ -95,10 +95,38 @@ def main():
             if climbs:
                 st.info(f"🏔️ Found {len(climbs)} climb(s) in this route!")
                 
+                # Custom graph title
+                st.subheader("🎨 Customize Your Graph")
+                graph_title = st.text_input(
+                    "Graph Title",
+                    value="Cycling Route Elevation Profile with Climbs",
+                    help="Enter a custom title for your elevation profile"
+                )
+                
+                # Climb naming section
+                st.subheader("📍 Name Your Climbs")
+                climb_names = {}
+                
+                climb_cols = st.columns(2)
+                for idx, climb in enumerate(climbs):
+                    col = climb_cols[idx % 2]
+                    with col:
+                        default_name = f"{climb['elevation_gain']:.0f} m Climb {idx + 1} ({climb['distance']:.1f} km at {climb['avg_gradient']:.1f}%)"
+                        climb_name = st.text_input(
+                            f"Climb {idx + 1} Name",
+                            value=default_name,
+                            key=f"climb_name_{idx}",
+                            help=f"Custom name for climb {idx + 1}"
+                        )
+                        climb_names[idx] = climb_name
+                
                 # Create visualization
                 with st.spinner("📊 Creating elevation profile..."):
                     visualizer = RouteVisualizer(route_data, climbs)
-                    img_buffer = visualizer.create_elevation_profile()
+                    img_buffer = visualizer.create_elevation_profile(
+                        title=graph_title,
+                        climb_names=climb_names
+                    )
                 
                 # Display the elevation profile
                 st.subheader("📈 Elevation Profile with Climbs")
@@ -106,7 +134,7 @@ def main():
                 
                 # Display climb summary table
                 st.subheader("📋 Climb Summary")
-                climb_summary = visualizer.create_climb_summary_table()
+                climb_summary = visualizer.create_climb_summary_table(climb_names=climb_names)
                 df = pd.DataFrame(climb_summary)
                 st.dataframe(df, use_container_width=True, hide_index=True)
                 
@@ -135,11 +163,12 @@ def main():
             st.markdown("""
             1. **Upload a GPX file**: Click the file uploader above and select a GPX file from your device
             2. **Adjust settings** (optional): Use the sidebar to customize climb detection parameters
-            3. **View results**: PyAscent will automatically detect climbs and display:
-               - An elevation profile with color-coded climbs
+            3. **Customize your graph**: Add a custom title and name your climbs
+            4. **View results**: PyAscent will automatically detect climbs and display:
+               - An elevation profile with your custom climb names
                - A detailed table with climb statistics
                - Climb categories based on difficulty (HC, 1, 2, 3, 4)
-            4. **Download**: Save the elevation profile image to your device
+            5. **Download**: Save the elevation profile image to your device
             
             **Climb Categories** (inspired by Tour de France):
             - **HC** (Hors Catégorie): Beyond categorization - the hardest climbs
